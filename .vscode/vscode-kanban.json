@@ -1,0 +1,16 @@
+{
+  "todo": [],
+  "in-progress": [
+    {
+      "assignedTo": {
+        "name": "Rohit Gupta"
+      },
+      "creation_time": "2026-05-24T08:36:08.249Z",
+      "id": "1",
+      "references": [],
+      "title": "Basic ebiten project"
+    }
+  ],
+  "testing": [],
+  "done": []
+}
