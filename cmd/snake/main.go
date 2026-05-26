@@ -1,13 +1,33 @@
 package main
 
 import (
+	"bytes"
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
 
 type Game struct {
-	Screen *ebiten.Image
+	Screen   *ebiten.Image
+	fontFace *text.GoTextFace
+}
+
+func NewGame() *Game {
+	fontSource, err := text.NewGoTextFaceSource(bytes.NewReader(fonts.PressStart2P_ttf))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fontFace := &text.GoTextFace{
+		Source: fontSource,
+		Size:   8,
+	}
+
+	return &Game{
+		fontFace: fontFace,
+	}
 }
 
 func (g *Game) Update() error {
@@ -20,16 +40,15 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return screenWidth * int(global_scale), screenHeight * int(global_scale)
+	return screenWidth, screenHeight
 }
 
-var game = &Game{}
+var microGame = NewGame()
 
 func main() {
-	ebiten.SetWindowSize(screenWidth*int(global_scale), screenHeight*int(global_scale))
 	ebiten.SetWindowTitle("Snake using Micro-GO")
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
-	if err := ebiten.RunGame(game); err != nil {
+	if err := ebiten.RunGame(microGame); err != nil {
 		log.Fatal(err)
 	}
 }

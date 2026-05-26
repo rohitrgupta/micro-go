@@ -51,6 +51,7 @@ func Update() error {
 	}
 
 	lastUpdateTime = time.Now()
+
 	for i := len(snake) - 1; i > 0; i-- {
 		snake[i] = snake[i-1]
 		snake[i].c = bodyColor
@@ -79,8 +80,11 @@ func Update() error {
 }
 
 func Draw() {
+	cls(12)
 	for _, point := range snake {
-		rect(point.X*cellSize, point.Y*cellSize, cellSize, cellSize, point.c)
+		rectb(point.X*cellSize, point.Y*cellSize, cellSize-1, cellSize-1, point.c)
+		circ(point.X*cellSize+cellSize/2, point.Y*cellSize+cellSize/2, cellSize/4, 2)
 	}
-	rect(food.X*cellSize, food.Y*cellSize, cellSize, cellSize, food.c)
+	circb(food.X*cellSize+cellSize/2, food.Y*cellSize+cellSize/2, cellSize/2, food.c)
+	print("Score: "+fmt.Sprint(len(snake)-2), 8, 0, 7)
 }

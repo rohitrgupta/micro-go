@@ -4,10 +4,12 @@ import (
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 )
 
-var global_scale float32 = 4.0
+// "github.com/hajimehoshi/ebiten/v2/example/resources/fonts"
+// var global_scale float32 = 4.0
 
 var screenWidth = 128
 var screenHeight = 128
@@ -31,14 +33,55 @@ var originalPico8Palette = []color.Color{
 	color.RGBA{R: 255, G: 204, B: 170, A: 255}, // 15 peach
 }
 
+// Graphics functions
+
+// cls fills the entire screen with the specified color index.
+func cls(c int) {
+	if c < 0 || c >= len(originalPico8Palette) {
+		return
+	}
+	microGame.Screen.Fill(originalPico8Palette[c])
+}
+
 // rect draws a rectangle on the screen with the given coordinates, width, height, and color index.
 func rect(x, y, w, h float32, c int) {
 	if c < 0 || c >= len(originalPico8Palette) {
 		return
 	}
-	vector.FillRect(game.Screen, x*global_scale, y*global_scale, w*global_scale, h*global_scale, originalPico8Palette[c], false)
+	vector.FillRect(microGame.Screen, x, y, w, h, originalPico8Palette[c], false)
 }
 
+func rectb(x, y, w, h float32, c int) {
+	if c < 0 || c >= len(originalPico8Palette) {
+		return
+	}
+	vector.StrokeRect(microGame.Screen, x, y, w, h, 1, originalPico8Palette[c], false)
+}
+
+func circ(x, y, r float32, c int) {
+	if c < 0 || c >= len(originalPico8Palette) {
+		return
+	}
+	vector.FillCircle(microGame.Screen, x, y, r, originalPico8Palette[c], false)
+}
+
+func circb(x, y, r float32, c int) {
+	if c < 0 || c >= len(originalPico8Palette) {
+		return
+	}
+	vector.StrokeCircle(microGame.Screen, x, y, r, 1, originalPico8Palette[c], false)
+}
+
+func print(str string, x, y float32, c int) {
+	if c < 0 || c >= len(originalPico8Palette) {
+		return
+	}
+	op := &text.DrawOptions{}
+	op.GeoM.Translate(float64(x), float64(y))
+	text.Draw(microGame.Screen, str, microGame.fontFace, op)
+}
+
+// Input handling
 var buttonMapping = map[int]ebiten.Key{
 	0: ebiten.KeyArrowUp,
 	1: ebiten.KeyArrowDown,
